@@ -5,7 +5,7 @@ Dotenv.load
 
 worker_processes 1 
 working_directory @path
-listen '/tmp/unicorn.sock' 
+listen '/tmp/mascot.sock' 
 pid "#{@path}/tmp/pids/unicorn.pid" 
 
 stderr_path "#{@path}/log/unicorn.stderr.log"

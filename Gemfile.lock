@@ -33,10 +33,13 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     mustermann (1.0.3)
+    mysql2 (0.5.2)
     mysql2 (0.5.2-x64-mingw32)
     net-http-digest_auth (1.4.1)
     net-http-persistent (3.0.0)
       connection_pool (~> 2.2)
+    nokogiri (1.8.4)
+      mini_portile2 (~> 2.3.0)
     nokogiri (1.8.4-x64-mingw32)
       mini_portile2 (~> 2.3.0)
     ntlm-http (0.1.1)
@@ -63,6 +66,7 @@ GEM
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
+    unf_ext (0.0.7.5)
     unf_ext (0.0.7.5-x64-mingw32)
     unicorn (5.4.1)
       kgio (~> 2.6)
@@ -70,6 +74,7 @@ GEM
     webrobots (0.1.2)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES

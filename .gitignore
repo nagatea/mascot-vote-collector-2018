@@ -1,3 +1,6 @@
 .bundle
-/vendor/
+/vendor
+/tmp
+/log
 .env
+cron.sh
