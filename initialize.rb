@@ -5,11 +5,11 @@ require 'mechanize'
 Dotenv.load
 
 db = Mysql2::Client.new(
-    host: ENV['DB_HOST'] || 'localhost',
-    port: ENV['DB_PORT'] || 3306,
-    username: ENV['DB_USER'] || 'root',
-    password: ENV['DB_PASSWORD'],
-    database: ENV['DB_NAME'] || 'mascot',
+  host: ENV['DB_HOST'] || 'localhost',
+  port: ENV['DB_PORT'] || 3306,
+  username: ENV['DB_USER'] || 'root',
+  password: ENV['DB_PASSWORD'],
+  database: ENV['DB_NAME'] || 'mascot'
 )
 
 agent = Mechanize.new
@@ -21,7 +21,7 @@ db.prepare('DELETE FROM users WHERE id >= 1').execute
 
 base_url = 'https://contest.gakumado.mynavi.jp/mascot2018/photos/detail/'
 
-(54..60).each do |id|
+(1..60).each do |id|
   page = agent.get(base_url + id.to_s)
   xpath = '//*[@id="contents"]/div/div[1]'
   content = page.search(xpath).to_s
