@@ -2,6 +2,7 @@ require 'sinatra/base'
 require "sinatra/json"
 require 'mysql2'
 require 'dotenv'
+require 'date'
 
 Dotenv.load
 
@@ -39,9 +40,60 @@ class App < Sinatra::Base
   end
 
   get '/api/users' do
-    data = Array.new
-    db.prepare('SELECT * FROM users').execute.each { |row| data << row }
-    puts data.inspect
+    data = db.prepare('SELECT * FROM users').execute.to_a
+    json data
+  end
+
+  get '/api/users/:id' do
+    id = params[:id].to_s
+    data = db.prepare('SELECT * FROM users WHERE id = ?').execute(id).first
+    json data
+  end
+
+  get '/api/dates' do
+    data = db.prepare('SELECT * FROM dates').execute.to_a
+    json data
+  end
+
+  get '/api/votes' do
+    query = 'SELECT votes.id, dates.date, users.name, users.owner_name, votes.vote FROM votes INNER JOIN users ON votes.user_id = users.id INNER JOIN dates ON votes.date_id = dates.id'
+    unless params[:date].nil?
+      begin
+        date = Date.parse(params[:date]).to_s
+      rescue
+        return 400
+      end
+      query << " WHERE dates.date = '#{date}'"
+    end
+    data = db.prepare(query).execute.to_a
+    json data
+  end
+
+  get '/api/datasets' do
+    data = {}
+
+    labels = []  
+    db.prepare('SELECT date from dates').execute.each do |date|
+      labels.push date['date']
+    end
+    data[:labels] = labels
+    random = Random.new
+    datasets = []
+    db.prepare('SELECT id, name FROM users').execute.each do |user|
+      next if user['name'] == 'undefined'
+      tmp = {}
+      tmp[:label] = user['name']
+      vote_data = []
+      db.prepare('SELECT vote FROM votes WHERE user_id = ?').execute(user['id']).each do |row|
+        vote_data.push(row['vote'])
+      end
+      tmp[:data] = vote_data
+      tmp[:borderColor] = "rgb(#{random.rand(255)},#{random.rand(255)},#{random.rand(255)})"
+      tmp[:lineTension] = 0
+      tmp[:fill] = false
+      datasets.push(tmp)
+    end
+    data[:datasets] = datasets.sort_by { |user| user[:data].last}.reverse
     json data
   end
 end
