@@ -7,6 +7,8 @@ require 'date'
 Dotenv.load
 
 class App < Sinatra::Base
+  set :public_folder, File.dirname(__FILE__) + '/client/dist'
+
   helpers do
     def config
       @config ||= {
@@ -36,7 +38,7 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    'Hello world!'
+    send_file File.join(settings.public_folder, 'index.html')
   end
 
   get '/api/users' do
