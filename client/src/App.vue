@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <h2><md-icon>insert_chart</md-icon> Chart</h2>
+    <Chart :height="600"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import Chart from './components/Chart'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Chart
   }
 }
 </script>
@@ -21,8 +21,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
