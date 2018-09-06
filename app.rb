@@ -72,6 +72,15 @@ class App < Sinatra::Base
       next if user['name'] == 'undefined'
       data.push user
     end
+    data.sort_by! do |user|
+      user['vote']
+    end
+    data.reverse!
+    i = 1
+    data.each do |user|
+      user[:rank] = i
+      i += 1
+    end
     json data
   end
 

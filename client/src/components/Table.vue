@@ -3,7 +3,7 @@
     <h2><md-icon class="md-size-2x">list_alt</md-icon>最新の集計結果({{ date.toFormat('YYYY-MM-DD') }})</h2>
     <md-table v-model="voteData" md-sort="vote" md-sort-order="desc" md-card>
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Id" md-sort-by="id">{{ item.id }}</md-table-cell>
+        <md-table-cell md-label="Rank" md-sort-by="rank">{{ item.rank }}</md-table-cell>
         <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Festival">{{ item.owner_name }}</md-table-cell>
         <md-table-cell md-label="Votes" md-sort-by="vote">{{ item.vote }}</md-table-cell>
