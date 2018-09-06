@@ -58,7 +58,7 @@ class App < Sinatra::Base
   end
 
   get '/api/votes' do
-    query = 'SELECT votes.id, dates.date, users.name, users.owner_name, votes.vote FROM votes INNER JOIN users ON votes.user_id = users.id INNER JOIN dates ON votes.date_id = dates.id'
+    query = 'SELECT votes.id, dates.date, users.id, users.name, users.owner_name, votes.vote FROM votes INNER JOIN users ON votes.user_id = users.id INNER JOIN dates ON votes.date_id = dates.id'
     unless params[:date].nil?
       begin
         date = Date.parse(params[:date]).to_s
@@ -67,7 +67,11 @@ class App < Sinatra::Base
       end
       query << " WHERE dates.date = '#{date}'"
     end
-    data = db.prepare(query).execute.to_a
+    data = []
+    db.prepare(query).execute.each do |user|
+      next if user['name'] == 'undefined'
+      data.push user
+    end
     json data
   end
 
