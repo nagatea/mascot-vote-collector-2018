@@ -57,21 +57,52 @@ class App < Sinatra::Base
     json data
   end
 
-  get '/api/votes' do
+
+  get 'api/votes' do
     query = 'SELECT votes.id, dates.date, users.id, users.name, users.owner_name, votes.vote FROM votes INNER JOIN users ON votes.user_id = users.id INNER JOIN dates ON votes.date_id = dates.id'
-    unless params[:date].nil?
-      begin
-        date = Date.parse(params[:date]).to_s
-      rescue
-        return 400
-      end
-      query << " WHERE dates.date = '#{date}'"
-    end
     data = []
     db.prepare(query).execute.each do |user|
       next if user['name'] == 'undefined'
       data.push user
     end
+    json data
+  end
+
+  get '/api/votes/:date' do
+    unless params[:date].nil?
+      begin
+        date = Date.parse(params[:date])
+      rescue
+        return 400
+      end
+    end
+
+    data = []
+    query = 'SELECT dates.id as date_id, dates.date, users.id, users.name, users.owner_name, votes.vote FROM votes INNER JOIN users ON votes.user_id = users.id INNER JOIN dates ON votes.date_id = dates.id WHERE dates.date = ?'
+    data = db.prepare(query).execute(date.to_s).to_a
+    
+    yesterday_date_id = data.first['date_id'] - 1
+    query = 'SELECT * from votes WHERE votes.date_id = ?'
+    yes_data = []
+    yes_data = db.prepare(query).execute(yesterday_date_id).to_a
+    yes_data.each do |user|
+      user_id = user['user_id']
+      data[user_id - 1][:difference] = data[user_id - 1]['vote'] - user['vote']
+    end
+
+    yes_data.sort_by! do |user|
+      user['vote']
+    end
+    yes_data.reverse!
+    i = 1
+    yes_data.each do |user|
+      user[:rank] = i
+      i += 1
+    end
+    yes_data.sort_by! do |user|
+      user['id']
+    end
+
     data.sort_by! do |user|
       user['vote']
     end
@@ -81,6 +112,22 @@ class App < Sinatra::Base
       user[:rank] = i
       i += 1
     end
+    data.sort_by! do |user|
+      user['id']
+    end
+
+    data.each do |user|
+      user_id = user['id']
+      user[:rank_difference] = yes_data[user_id - 1][:rank] - user[:rank]
+    end
+
+    data.sort_by! do |user|
+      user['vote']
+    end
+    data.reverse!
+
+    data.delete_if {|user| user['name'] == 'undefined' }
+
     json data
   end
 
