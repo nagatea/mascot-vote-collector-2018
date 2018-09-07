@@ -4,7 +4,7 @@
     <md-table v-model="voteData" md-sort="vote" md-sort-order="desc" md-card>
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="Rank" md-sort-by="rank">{{ item.rank }}</md-table-cell>
-        <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Name"><a :href="base_url + item.id" target="_blank">{{ item.name }}</a></md-table-cell>
         <md-table-cell md-label="Festival">{{ item.owner_name }}</md-table-cell>
         <md-table-cell md-label="Votes" md-sort-by="vote">{{ item.vote }}</md-table-cell>
       </md-table-row>
@@ -20,7 +20,8 @@ export default {
   data () {
     return {
       date: null,
-      voteData: []
+      voteData: [],
+      base_url: 'https://contest.gakumado.mynavi.jp/mascot2018/photos/detail/'
     }
   },
   async created () {
