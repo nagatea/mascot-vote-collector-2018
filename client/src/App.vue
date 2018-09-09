@@ -8,7 +8,7 @@
     <Chart :height="600"/>
     <Table/>
     <md-toolbar md-elevation="0">
-      <p>©2018. Made by <a href="https://twitter.com/_nagatech" target="_blank">@_nagatech</a></p>
+      <p>Made by <a href="https://twitter.com/_nagatech" target="_blank">@_nagatech</a>. This site is not endorsed by nor affiliated with Mynavi Corporation.</p>
     </md-toolbar>
   </div>
 </template>
