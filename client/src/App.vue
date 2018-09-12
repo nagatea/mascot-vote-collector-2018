@@ -4,9 +4,9 @@
       <h1 class="md-title">Mascot Ranking Viewer</h1>
       <span class="subtitle">第6回学園祭マスコット総選挙非公式ランキング閲覧ツール</span>
     </md-toolbar>
-    <h2><md-icon>insert_chart</md-icon> Chart</h2>
-    <Chart :height="600"/>
-    <Table/>
+
+    <router-view/>
+
     <md-toolbar md-elevation="0">
       <p>Made by <a href="https://twitter.com/_nagatech" target="_blank">@_nagatech</a>. This site is not endorsed by nor affiliated with Mynavi Corporation.</p>
     </md-toolbar>
@@ -14,15 +14,8 @@
 </template>
 
 <script>
-import Chart from './components/Chart'
-import Table from './components/Table'
-
 export default {
-  name: 'App',
-  components: {
-    Chart,
-    Table
-  }
+  name: 'App'
 }
 </script>
 
