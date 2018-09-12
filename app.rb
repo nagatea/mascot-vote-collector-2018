@@ -158,4 +158,33 @@ class App < Sinatra::Base
     data[:datasets] = datasets.sort_by { |user| user[:data].last}.reverse
     json data
   end
+
+  get '/api/datasets/:id' do
+    data = {}
+    id = params[:id]
+
+    labels = []  
+    db.prepare('SELECT date from dates').execute.each do |date|
+      labels.push date['date']
+    end
+    data[:labels] = labels
+    random = Random.new
+    datasets = []
+    db.prepare('SELECT id, name, owner_name FROM users WHERE id = ?').execute(id).each do |user|
+      tmp = {}
+      tmp[:label] = user['name']
+      tmp[:owner_name] = user['owner_name']
+      vote_data = []
+      db.prepare('SELECT vote FROM votes WHERE user_id = ?').execute(id).each do |row|
+        vote_data.push(row['vote'])
+      end
+      tmp[:data] = vote_data
+      tmp[:borderColor] = "rgb(#{random.rand(255)},#{random.rand(255)},#{random.rand(255)})"
+      tmp[:lineTension] = 0
+      tmp[:fill] = false
+      datasets.push(tmp)
+    end
+    data[:datasets] = datasets
+    json data
+  end
 end
